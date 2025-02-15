@@ -9,8 +9,9 @@ export default function AssemblyEndgame() {
     const [currentWord, setCurrentWord] = useState(() => RandomWord());
     const [guessedLetters, setGuessedLetters] = useState([]);
     const [timeLeft, setTimeLeft] = useState(40); // Updated to 40 seconds
-    const [isTimerActive, setIsTimerActive] = useState(true); // Timer starts when the game starts
+    const [isTimerActive, setIsTimerActive] = useState(false); // Timer starts only after first guess
     const [farewellMessage, setFarewellMessage] = useState(null); // Track the farewell message
+    const [hasGameStarted, setHasGameStarted] = useState(false); // Track if the game has started
 
     // useRef Hook for highlighting at end
     const newGameButtonRef = useRef(null);
@@ -68,20 +69,25 @@ export default function AssemblyEndgame() {
 
             const key = event.key.toLowerCase(); // Convert key to lowercase
             if (/^[a-z]$/.test(key)) { // Check if the key is a valid letter (A-Z)
+                if (!hasGameStarted) {
+                    setHasGameStarted(true); // Start the game on first key press
+                    setIsTimerActive(true); // Start the timer
+                }
                 addGuessedLetter(key);
             }
         };
 
         window.addEventListener("keydown", handleKeyDown); // Add event listener
         return () => window.removeEventListener("keydown", handleKeyDown); // Cleanup event listener
-    }, [isGameOver, addGuessedLetter]);
+    }, [isGameOver, addGuessedLetter, hasGameStarted]);
 
     // Reset timer and start new game
     function startNewGame() {
         setCurrentWord(RandomWord());
         setGuessedLetters([]);
         setTimeLeft(40); // Reset timer to 40 seconds
-        setIsTimerActive(true); // Reactivate the timer
+        setIsTimerActive(false); // Reset timer to inactive
+        setHasGameStarted(false); // Reset game start state
         setFarewellMessage(null); // Reset farewell message
     }
 
@@ -135,7 +141,13 @@ export default function AssemblyEndgame() {
                 disabled={isGameOver}
                 aria-disabled={guessedLetters.includes(letter)}
                 aria-label={`Letter ${letter}`}
-                onClick={() => addGuessedLetter(letter)}
+                onClick={() => {
+                    if (!hasGameStarted) {
+                        setHasGameStarted(true); // Start the game on first click
+                        setIsTimerActive(true); // Start the timer
+                    }
+                    addGuessedLetter(letter);
+                }}
             >
                 {letter.toUpperCase()}
             </button>
