@@ -205,7 +205,6 @@ export default function AssemblyEndgame() {
             )}
 
             <header>
-                <p>{currentWord}</p>
                 <h1>Assembly: Endgame</h1>
                 <p>
                     Guess the word within {totalGuessesAllowed} attempts and{" "}
