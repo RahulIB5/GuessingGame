@@ -187,7 +187,6 @@ export default function AssemblyEndgame() {
                             ? "Time's up! You ran out of time. 😭"
                             : "You lose! Better start learning Assembly 😭"}
                     </p>
-                    <p>Remaining Guesses: 0</p>
                 </>
             );
         }
