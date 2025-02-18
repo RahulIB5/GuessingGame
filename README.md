@@ -1,3 +1,3 @@
 # A fully functional guessing game built using React
 
-## guesssss-six.vercel.app/
+## https://guesssss-six.vercel.app/
